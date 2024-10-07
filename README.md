@@ -1,1 +1,3 @@
-# DS346_Project
+# Data Science 346 project
+
+## Plan of action:
