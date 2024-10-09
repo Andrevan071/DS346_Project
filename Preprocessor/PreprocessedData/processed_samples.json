@@ -1,0 +1,213 @@
+[
+  {
+    "question_code": [
+      "model  =  Sequential (  )  model . add ( Dense ( 64 ,  input_dim = 14 ,  init =  ' uniform '  )  )  model . add ( LeakyReLU ( alpha = 0 . 3 )  )  model . add ( BatchNormalization ( epsilon = 1e - 06 ,  mode = 0 ,  momentum = 0 . 9 ,  weights = None )  )  model . add ( Dropout ( 0 . 5 )  )  model . add ( Dense ( 64 ,  init =  ' uniform '  )  )  model . add ( LeakyReLU ( alpha = 0 . 3 )  )  model . add ( BatchNormalization ( epsilon = 1e - 06 ,  mode = 0 ,  momentum = 0 . 9 ,  weights = None )  )  model . add ( Dropout ( 0 . 5 )  )  model . add ( Dense ( 2 ,  init =  ' uniform '  )  )  model . add ( Activation (  ' softmax '  )  )  sgd  =  SGD ( lr = 0 . 1 ,  decay = 1e - 6 ,  momentum = 0 . 9 ,  nesterov = True )  model . compile ( loss =  ' binary_crossentropy '  ,  optimizer = sgd )  checkpointer  =  ModelCheckpoint ( filepath =  \"  / weights . hdf5 \"  ,  verbose = 1 ,  save_best_only = True )  model . fit ( X_train ,  y_train ,  nb_epoch = 20 ,  batch_size = 16 ,  show_accuracy = True ,  validation_split = 0 . 2 ,  verbose  =  2 ,  callbacks =  [ checkpointer ]  )",
+      "model2  =  Sequential (  )  model2 . load_weights (  \"  / Users / Desktop / SquareSpace / weights . hdf5 \"  )",
+      "IndexError Traceback  ( most recent call last ) in (  )  1 model2  =  Sequential (  )   -  -  -  -  >  2 model2 . load_weights (  \"  / Users / Desktop / SquareSpace / weights . hdf5 \"  )   / Applications / anaconda / lib / python2 . 7 / site - packages / keras / models . pyc in load_weights ( self ,  filepath )  582 g  =  f [  ' layer_ {  }  '  . format ( k )  ]  583 weights  =   [ g [  ' param_ {  }  '  . format ( p )  ]  for p in range ( g . attrs [  ' nb_params '  ]  )  ]   -  -  >  584 self . layers [ k ]  . set_weights ( weights )  585 f . close (  )  586 IndexError :  list index out of range"
+    ],
+    "question_text": [
+      "how to load a model from an hdf5 file in keras",
+      "what i tried",
+      "the above code successfully saves the best model to a file named weights.hdf5. what i want to do is then load that model. the below code shows how i tried to do so",
+      "this is the error i get"
+    ],
+    "answer_code": [
+      "from keras . models import load_model model  =  load_model (  ' model . h5 '  )",
+      "load_weights",
+      "load_weights",
+      "def create_model (  )  :  model  =  Sequential (  )  model . add ( Dense ( 64 ,  input_dim = 14 ,  init =  ' uniform '  )  )  model . add ( LeakyReLU ( alpha = 0 . 3 )  )  model . add ( BatchNormalization ( epsilon = 1e - 06 ,  mode = 0 ,  momentum = 0 . 9 ,  weights = None )  )  model . add ( Dropout ( 0 . 5 )  )  model . add ( Dense ( 64 ,  init =  ' uniform '  )  )  model . add ( LeakyReLU ( alpha = 0 . 3 )  )  model . add ( BatchNormalization ( epsilon = 1e - 06 ,  mode = 0 ,  momentum = 0 . 9 ,  weights = None )  )  model . add ( Dropout ( 0 . 5 )  )  model . add ( Dense ( 2 ,  init =  ' uniform '  )  )  model . add ( Activation (  ' softmax '  )  )  return model def train (  )  :  model  =  create_model (  )  sgd  =  SGD ( lr = 0 . 1 ,  decay = 1e - 6 ,  momentum = 0 . 9 ,  nesterov = True )  model . compile ( loss =  ' binary_crossentropy '  ,  optimizer = sgd )  checkpointer  =  ModelCheckpoint ( filepath =  \"  / tmp / weights . hdf5 \"  ,  verbose = 1 ,  save_best_only = True )  model . fit ( X_train ,  y_train ,  nb_epoch = 20 ,  batch_size = 16 ,  show_accuracy = True ,  validation_split = 0 . 2 ,  verbose = 2 ,  callbacks =  [ checkpointer ]  )  def load_trained_model ( weights_path )  :  model  =  create_model (  )  model . load_weights ( weights_path )",
+      ""
+    ],
+    "answer_text": [
+      "if you stored the complete model not only the weights in the hdf5 file then it is as simple as",
+      "only sets the weights of your network. you still need to define its architecture before calling",
+      "see the following sample code on how to build a basic keras neural net model save model json weights hdf5 and load them"
+    ]
+  },
+  {
+    "question_code": [
+      "num_attribs  =  list ( housing_num )  cat_attribs  =   [  \" ocean_proximity \"  ]  print ( type ( num_attribs )  )  num_pipeline  =  Pipeline (  [   (  ' selector '  ,  DataFrameSelector ( num_attribs )  )  ,   (  ' imputer '  ,  Imputer ( strategy =  \" median \"  )  )  ,   (  ' attribs_adder '  ,  CombinedAttributesAdder (  )  )  ,   (  ' std_scaler '  ,  StandardScaler (  )  )   ]  )  cat_pipeline  =  Pipeline (  [   (  ' selector '  ,  DataFrameSelector ( cat_attribs )  )  ,   (  ' label_binarizer '  ,  LabelBinarizer (  )  )   ]  )",
+      "from sklearn . pipeline import FeatureUnion full_pipeline  =  FeatureUnion ( transformer_list =  [   (  \" num_pipeline \"  ,  num_pipeline )  ,   (  \" cat_pipeline \"  ,  cat_pipeline )   ]  )",
+      "housing_prepared  =  full_pipeline . fit_transform ( housing )  housing_prepared"
+    ],
+    "question_text": [
+      "i am totally new to machine learning and i have been working with unsupervised learning technique.",
+      "image shows my sample data after all cleaning screenshot sample data",
+      "sample data",
+      "i have this two pipline built to clean the data",
+      "then i did the union of this two pipelines and the code for the same is shown below",
+      "now i am trying to do fit transform on thedatabut its showing me the error.",
+      "data",
+      "code for transformation",
+      "error message",
+      "fit transform takes 2 positional arguments but 3 were given"
+    ],
+    "answer_code": [
+      "fit_transform",
+      "def fit_transform ( self ,  x ,  y )   .  .  . rest of the code",
+      "def fit_transform ( self ,  x )  :   .  .  . rest of the code",
+      "from sklearn . base import TransformerMixin",
+      "fit",
+      "self . classes_ ,  self . y_type_ ,  self . sparse_input_  =  self . encoder . classes_ ,  self . encoder . y_type_ ,  self . encoder . sparse_input_",
+      "scikit - learn",
+      "0 . 19 . 0",
+      "LabelBinarizer",
+      "fit_transform",
+      "LabelBinarizer",
+      "0 . 18 . 0",
+      "$  pip install scikit - learn =  = 0 . 18 . 0",
+      "CategoricalEncoder",
+      "cat_pipeline  =  Pipeline (  [   (  ' selector '  ,  DataFrameSelector ( cat_attribs )  )  ,   (  ' label_binarizer '  ,  LabelBinarizer (  )  )   ]  )",
+      "cat_pipeline  =  Pipeline (  [   (  ' selector '  ,  DataFrameSelector ( cat_attribs )  )  ,   (  ' one_hot_encoder '  ,  OneHotEncoder ( sparse = False )  )   ]  )"
+    ],
+    "answer_text": [
+      "the problem",
+      "the pipeline is assuming labelbinarizer smethod is defined to take three positional arguments",
+      "while it is defined to take only two",
+      "possible solution",
+      "this can be solved by making a custom transformer that can handle 3 positional arguments",
+      "import and make a new class",
+      "keep your code the same only instead of using labelbinarizer use the class we created mylabelbinarizer .",
+      "note if you want access to labelbinarizer attributes e.g. classes add the following line to themethod",
+      "i believe your example is from the book hands on machine learning with scikit learn tensorflow. unfortunately i ran into this problem as well. a recent change in changed smethod. unfortunately was never intended to work how that example uses it. you can see information about the changehereandhere.",
+      "here",
+      "here",
+      "until they come up with a solution for this you can install the previous version as follows",
+      "after running that your code should run without issue.",
+      "in the future it looks like the correct solution may be to use aclass or something similar to that. they have been trying to solve this problem for years apparently. you can see the new classhereand further discussion of the problemhere.",
+      "here",
+      "here",
+      "i think you are going through the examples from the book hands on machine learning with scikit learn and tensorflow. i ran into the same problem when going through the example in chapter 2.",
+      "hands on machine learning with scikit learn and tensorflow",
+      "as mentioned by other people the problem is to do with sklearn s labelbinarizer. it takes less args in its fit transform method compared to other transformers in the pipeline. only y when other transformers normally take both x and y seeherefor details . that s why when we run pipeline.fit transform we fed more args into this transformer than required.",
+      "here",
+      "an easy fix i used is to just use onehotencoder and set the sparse to false to ensure the output is a numpy array same as the num pipeline output. this way you don t need to code up your own custom encoder",
+      "your original cat pipeline",
+      "you can simply change this part to",
+      "you can go from here and everything should work."
+    ]
+  },
+  {
+    "question_code": [
+      "ValueError :  Wrong number of items passed 3 ,  placement implies 1",
+      "KeyError Traceback  ( most recent call last )  C :  \\ Users \\ brennn1 \\ AppData \\ Local \\ Continuum \\ Anaconda3 \\ lib \\ site - packages \\ pandas \\ indexes \\ base . py in get_loc ( self ,  key ,  method ,  tolerance )  1944 try :   -  >  1945 return self . _engine . get_loc ( key )  1946 except KeyError :  pandas \\ index . pyx in pandas . index . IndexEngine . get_loc  ( pandas \\ index . c : 4154 )  (  )  pandas \\ index . pyx in pandas . index . IndexEngine . get_loc  ( pandas \\ index . c : 4018 )  (  )  pandas \\ hashtable . pyx in pandas . hashtable . PyObjectHashTable . get_item  ( pandas \\ hashtable . c : 12368 )  (  )  pandas \\ hashtable . pyx in pandas . hashtable . PyObjectHashTable . get_item  ( pandas \\ hashtable . c : 12322 )  (  )  KeyError :   ' predictedY '  During handling of the above exception ,  another exception occurred :  KeyError Traceback  ( most recent call last )  C :  \\ Users \\ brennn1 \\ AppData \\ Local \\ Continuum \\ Anaconda3 \\ lib \\ site - packages \\ pandas \\ core \\ internals . py in set ( self ,  item ,  value ,  check )  3414 try :   -  >  3415 loc  =  self . items . get_loc ( item )  3416 except KeyError :  C :  \\ Users \\ brennn1 \\ AppData \\ Local \\ Continuum \\ Anaconda3 \\ lib \\ site - packages \\ pandas \\ indexes \\ base . py in get_loc ( self ,  key ,  method ,  tolerance )  1946 except KeyError :   -  >  1947 return self . _engine . get_loc ( self . _maybe_cast_indexer ( key )  )  1948 pandas \\ index . pyx in pandas . index . IndexEngine . get_loc  ( pandas \\ index . c : 4154 )  (  )  pandas \\ index . pyx in pandas . index . IndexEngine . get_loc  ( pandas \\ index . c : 4018 )  (  )  pandas \\ hashtable . pyx in pandas . hashtable . PyObjectHashTable . get_item  ( pandas \\ hashtable . c : 12368 )  (  )  pandas \\ hashtable . pyx in pandas . hashtable . PyObjectHashTable . get_item  ( pandas \\ hashtable . c : 12322 )  (  )  KeyError :   ' predictedY '  During handling of the above exception ,  another exception occurred :  ValueError Traceback  ( most recent call last ) in (  )  26 return gp ,  results 27  -  -  -  >  28 gp_dailyElectricity ,  results_dailyElectricity  =  predictAll ( 3 ,  0 . 04 ,  trainX_dailyElectricity ,  trainY_dailyElectricity ,  testX_dailyElectricity ,  testY_dailyElectricity ,  testSet_dailyElectricity ,   ' Daily Electricity '  ) in predictAll ( theta ,  nugget ,  trainX ,  trainY ,  testX ,  testY ,  testSet ,  title )  8 9 results  =  testSet . copy (  )   -  -  -  >  10 results [  ' predictedY '  ]   =  predictedY 11 results [  ' sigma '  ]   =  sigma 12 C :  \\ Users \\ brennn1 \\ AppData \\ Local \\ Continuum \\ Anaconda3 \\ lib \\ site - packages \\ pandas \\ core \\ frame . py in __setitem__ ( self ,  key ,  value )  2355 else :  2356",
+      "def predictAll ( theta ,  nugget ,  trainX ,  trainY ,  testX ,  testY ,  testSet ,  title )  :  gp  =  gaussian_process . GaussianProcess ( theta0 = theta ,  nugget  = nugget )  gp . fit ( trainX ,  trainY )  predictedY ,  MSE  =  gp . predict ( testX ,  eval_MSE  =  True )  sigma  =  np . sqrt ( MSE )  results  =  testSet . copy (  )  results [  ' predictedY '  ]   =  predictedY results [  ' sigma '  ]   =  sigma print  (  \" Train score R2 :  \"  ,  gp . score ( trainX ,  trainY )  )  print  (  \" Test score R2 :  \"  ,  sklearn . metrics . r2_score ( testY ,  predictedY )  )  plt . figure ( figsize  =   ( 9 , 8 )  )  plt . scatter ( testY ,  predictedY )  plt . plot (  [ min ( testY )  ,  max ( testY )  ]  ,   [ min ( testY )  ,  max ( testY )  ]  ,   ' r '  )  plt . xlim (  [ min ( testY )  ,  max ( testY )  ]  )  plt . ylim (  [ min ( testY )  ,  max ( testY )  ]  )  plt . title (  ' Predicted vs .  observed :   '   +  title )  plt . xlabel (  ' Observed '  )  plt . ylabel (  ' Predicted '  )  plt . show (  )  return gp ,  results gp_dailyElectricity ,  results_dailyElectricity  =  predictAll ( 3 ,  0 . 04 ,  trainX_dailyElectricity ,  trainY_dailyElectricity ,  testX_dailyElectricity ,  testY_dailyElectricity ,  testSet_dailyElectricity ,   ' Daily Electricity '  )"
+    ],
+    "question_text": [
+      "i am receiving the error and i am struggling to figure out where and how i may begin addressing the problem.",
+      "i don t really understand the meaning of the error which is making it difficult for me to troubleshoot. i have also included the block of code that is triggering the error in my jupyter notebook.",
+      "the data is tough to attach so i am not looking for anyone to try and re create this error for me. i am just looking for some feedback on how i could address this error.",
+      "my code is as follows"
+    ],
+    "answer_code": [
+      "ValueError :  Wrong number of items passed 3 ,  placement implies 1",
+      "results [  ' predictedY '  ]   =  predictedY",
+      "gaussian_process . GaussianProcess (  )",
+      "predictedY ,  MSE  =  gp . predict ( testX ,  eval_MSE  =  True )",
+      "predict (  )",
+      "( n_samples ,  n_targets )",
+      "testX",
+      "( 1000 ,  3 )",
+      "predictedY"
+    ],
+    "answer_text": [
+      "in general the errorsuggests that you are attempting to put too many pigeons in too few pigeonholes. in this case the value on the right of the equation",
+      "is trying to put 3 things into a container that allows only one. because the left side is a dataframe column and can accept multiple items on that column dimension you should see that there are too many items on another dimension.",
+      "here it appears you are using sklearn for modeling which is whereis coming from i m guessing but correct me and revise the question if this is wrong .",
+      "now you generate predicted values for y here",
+      "however as we can see fromthe documentation for gaussianprocess returns two items. the first is y which is array like emphasis mine . that means that it can have more than one dimension or to be concrete for thick headed people like me it can have more than one column see that it can returnwhich depending on could be just to pick numbers . thus yourmight have 3 columns.",
+      "the documentation for gaussianprocess",
+      "if so when you try to put something with three columns into a single dataframe column you are passing 3 items where only 1 would fit.",
+      "not sure if this is relevant to your question but it might be relevant to someone else in the future i had a similar error. turned out that the df was empty had zero rows and that is what was causing the error in my command.",
+      "another cause of this error is when you apply a function on a dataframe where there are two columns with the same name."
+    ]
+  },
+  {
+    "question_code": [
+      "shuffle = True",
+      "StratifiedKFold ( n_splits = 10 ,  shuffle = True ,  random_state = 0 )",
+      "StratifiedShuffleSplit ( n_splits = 10 ,  test_size =  \\ u2019default \\ u2019 ,  train_size = None ,  random_state = 0 )"
+    ],
+    "question_text": [
+      "as from the title i am wondering what is the difference between",
+      "stratifiedkfoldwith the parameter",
+      "stratifiedkfold",
+      "and",
+      "stratifiedshufflesplit",
+      "stratifiedshufflesplit",
+      "and what is the advantage of using stratifiedshufflesplit"
+    ],
+    "answer_code": [
+      "stratKFolds",
+      "stratKFolds",
+      "shuffle = True",
+      "ShuffleSplit",
+      "ShuffleSplit",
+      "splits  =  5 tx  =  range ( 10 )  ty  =   [ 0 ]   *  5  +   [ 1 ]   *  5 from sklearn . model_selection import StratifiedShuffleSplit ,  StratifiedKFold from sklearn import datasets stratKfold  =  StratifiedKFold ( n_splits = splits ,  shuffle = True ,  random_state = 42 )  shufflesplit  =  StratifiedShuffleSplit ( n_splits = splits ,  random_state = 42 ,  test_size = 2 )  print (  \" stratKFold \"  )  for train_index ,  test_index in stratKfold . split ( tx ,  ty )  :  print (  \" TRAIN :  \"  ,  train_index ,   \" TEST :  \"  ,  test_index )  print (  \" Shuffle Split \"  )  for train_index ,  test_index in shufflesplit . split ( tx ,  ty )  :  print (  \" TRAIN :  \"  ,  train_index ,   \" TEST :  \"  ,  test_index )",
+      "stratKFold TRAIN :   [ 0 2 3 4 5 6 7 9 ]  TEST :   [ 1 8 ]  TRAIN :   [ 0 1 2 3 5 7 8 9 ]  TEST :   [ 4 6 ]  TRAIN :   [ 0 1 3 4 5 6 8 9 ]  TEST :   [ 2 7 ]  TRAIN :   [ 1 2 3 4 6 7 8 9 ]  TEST :   [ 0 5 ]  TRAIN :   [ 0 1 2 4 5 6 7 8 ]  TEST :   [ 3 9 ]  Shuffle Split TRAIN :   [ 8 4 1 0 6 5 7 2 ]  TEST :   [ 3 9 ]  TRAIN :   [ 7 0 3 9 4 5 1 6 ]  TEST :   [ 8 2 ]  TRAIN :   [ 1 2 5 6 4 8 9 0 ]  TEST :   [ 3 7 ]  TRAIN :   [ 4 6 7 8 3 5 1 2 ]  TEST :   [ 9 0 ]  TRAIN :   [ 7 2 6 5 4 3 0 9 ]  TEST :   [ 1 8 ]",
+      "stratKFolds",
+      "ShuffleSplit",
+      "StratifiedKFold",
+      "KFold",
+      "StratifiedKFold",
+      "n_splits",
+      "shuffle  =  True",
+      "random_state",
+      "np . random",
+      "n_splits  =  4",
+      "y",
+      "StratifiedShuffleSplit",
+      "ShuffleSplit",
+      "StratifiedShuffleSplit",
+      "n_splits",
+      "StratifiedShuffleSplit",
+      "n_splits  -  1",
+      "n_splits  -  1",
+      "StratifiedKFold",
+      "StratifiedShuffleSplit",
+      "n_splits",
+      "@ Ken Syme",
+      "from sklearn . model_selection import KFold ,  StratifiedKFold ,  StratifiedShuffleSplit SEED  =  43 SPLIT  =  3 X_train  =   [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 ]  y_train  =   [ 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 ]"
+    ],
+    "answer_text": [
+      "in each test set should not overlap even when shuffle is included. withand the data is shuffled once at the start and then divided into the number of desired splits. the test data is always one of the splits the train data is the rest.",
+      "in the data is shuffled every time and then split. this means the test sets may overlap between the splits.",
+      "see this block for an example of the difference. note the overlap of the elements in the test sets for.",
+      "output",
+      "as for when to use them i tend to usefor any cross validation and i usewith a split of 2 for my train test set splits. but i m sure there are other use cases for both.",
+      "ken syme already has a very good answer. i just want to add something.",
+      "with the data is shuffled by your. otherwise the data is shuffled by as default . for example with and your data has 3 classes label for dependent variable . 4 test sets cover all the data without any overlap.",
+      "so the difference here is thatjust shuffles and splits once therefore the test sets do not overlap whileshuffles each time before splitting and it splitstimes the test sets can overlap.",
+      "cross validation documents",
+      "output examples of kfold stratifiedkfold stratifiedshufflesplit",
+      "the above pictorial output is an extension of s code"
+    ]
+  },
+  {
+    "question_code": [],
+    "question_text": [
+      "what is the difference between the two it seems that both create new columns which their number is equal to the number of unique categories in the feature. then they assign 0 and 1 to data points depending on what category they are in."
+    ],
+    "answer_code": [
+      "from numpy import array from sklearn . preprocessing import LabelEncoder from sklearn . preprocessing import OneHotEncoder from sklearn . preprocessing import LabelBinarizer",
+      "OneHotEncoder",
+      "LabelBinarizer",
+      "LabelEncoder",
+      "from sklearn . preprocessing import LabelBinarizer ,  LabelEncoder ,  OneHotEncoder X  =   [  [  \" US \"  ,   \" M \"  ]  ,   [  \" UK \"  ,   \" M \"  ]  ,   [  \" FR \"  ,   \" F \"  ]  ]  OneHotEncoder (  )  . fit_transform ( X )  . toarray (  )",
+      "LabelBinarizer (  )  . fit_transform ( X )"
+    ],
+    "answer_text": [
+      "a simple example which encodes an array using labelencoder onehotencoder labelbinarizer is shown below.",
+      "i see that onehotencoder needs data in integer encoded form first to convert into its respective encoding which is not required in the case of labelbinarizer.",
+      "another good link which explains the onehotencoder is explain onehotencoder using python",
+      "explain onehotencoder using python",
+      "there may be other valid differences between the two which experts can probably explain.",
+      "a difference is that you can usefor multi column data while not forand.",
+      "scikitlearn suggests using onehotencoder for x matrix i.e. the features you feed in a model and to use a labelbinarizer for the y labels.",
+      "they are quite similar except that onehotencoder could return a sparse matrix that saves a lot of memory and you won t really need that in y labels.",
+      "even if you have a multi label multi class problem you can use multilabelbinarizer for your y labels rather than switching to onehotencoder for multi hot encoding.",
+      "https scikit learn.org stable modules generated sklearn.preprocessing.onehotencoder.html",
+      "https scikit learn.org stable modules generated sklearn.preprocessing.onehotencoder.html"
+    ]
+  }
+]
