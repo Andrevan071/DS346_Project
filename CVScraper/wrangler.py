@@ -61,5 +61,9 @@ def wrangle_scraped_data(dir):
 
 wrangled_data = wrangle_scraped_data('data')
 
+data = {
+    "conversations": wrangled_data
+}
+
 with open('wrangled_data/processed_data.json', 'w') as file:
-    json.dump(wrangled_data, file, indent=2)
+    json.dump(data, file, indent=2)
