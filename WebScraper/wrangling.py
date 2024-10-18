@@ -36,7 +36,7 @@ class JSONCombiner:
                     del tag[attr]
                     
         # Only keep essential HTML tags
-        allowed_tags = {'p', 'code', 'a'}
+        allowed_tags = {'p', 'code', 'a', 'ol', 'li', 'ul', 'strong', 'b', 'i', 'u', 'mark', 'small', 'sub', 'sup', 'span', 'table'}
         for tag in soup.find_all():
             if tag.name not in allowed_tags:
                 tag.unwrap()
