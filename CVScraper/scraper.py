@@ -105,7 +105,7 @@ async def scrape_page_range(session, start_page, end_page, rate_limiter):
         json.dump(items, file, indent=4, ensure_ascii=False)
 
 async def main():
-    pages = [1, 102, 203, 304, 405, 506, 607, 708, 809, 910]
+    pages = [1, 102, 203, 304, 405, 506, 607, 708, 809, 910, 1011, 1112]
     
     rate_limiter = RateLimiter(rate_limit=6, period=8)  # 6 requests per 8 seconds
 
