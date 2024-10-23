@@ -60,14 +60,8 @@ details about the scraped data, and the tools used in the scraping process.
 With the ever-expanding fields of statistics and machine learning (ML), it is hard to keep up with all of
 the new ideas and models being introduced.
 Cross Validated \cite{stackexchange}, part of the Stack Exchange network, hosts a specialised question-and-answer platform
-dedicated to topics such as:
-\begin{itemize}
-    \item Statistics
-    \item Machine learning
-    \item Data analysis
-    \item Data mining
-    \item Data visualisation
-\end{itemize}
+dedicated to topics such as statistics, machine learning, data analysis, data mining and data visualisation.
+
 Cross Validated provides a community-driven environment for professionals and enthusiasts to ask and answer
 questions, share knowledge and discuss best practices in these fields \cite{stackexchange-tour}.
 
@@ -102,19 +96,17 @@ model, the ethical concerns should always be addressed. This includes intellectu
 property and informed consent. There is a fine balance between balancing respect for privacy and the
 utility of web scraping.
 
-\subsection{Intellectual Property}
-
+\paragraph{Intellectual Property}
 There are laws that protect websites such as copyright and one should step carefully not to unintentionally
 break a law. It is important therefore to read the sites terms of service to make
 sure you don't use any data you are not allowed to \cite{stackexchange-terms}.
 
-\subsection{Personal Property}
+\paragraph{Personal Property}
 Personal information is protected by the protection of personal information (POPI) act and it is usually of
 your best interest to not scrape any personal information from a website. If personal information does slip
 through one should pseudonymise and anonymise the data. 
 
-\subsection{Informed Consent}
-
+\paragraph{Informed Consent}
 Even if the data is publicly available it does not mean you have the right to use it. You should ask
 beforehand if you are allowed to use the data and for what purposes.
 There are steps you can follow to help you ethically scrape data:
@@ -237,13 +229,8 @@ UnSloth Optimisation helps to optimise the process of finetuning our model.
 
 UnSloth is a fine-tuning framework designed to enhance productivity by streamlining the
 process of adapting LLM like Llama-3.2. UnSloth makes fine-tuning
-LLM \cite{unslothdocs}:
-\begin{itemize}
-    \item 2 times faster
-    \item Use 70\% less memory
-    \item Automates hyperparameter tuning
-    \item Maintains model accuracy
-\end{itemize}
+LLM 2 times faster, use 70\% less memory, automates hyperparameter tuning
+and maintains model accuracy \cite{unslothdocs}.
 
 We used UnSloth optimisation to optimise the fine-tuning process of our LLaMa model \cite{unslothfine-tune}.
 UnSloth applies the following techniques to ensure the fine-tuning
@@ -273,12 +260,7 @@ We prompted both models with a data science introductory, application and comple
 
 Figure \ref{fig: Q1} displays the response of our two models when prompted with the following introductory
 level question: "\textit{What is the gaussian formula and all of its parameters?}"
-Figure \ref{fig: Q2} displays the response of our two models when prompted with the following application
-level question: "\textit{Can you explain how decision trees handle numerical variables in a classification task?}"
-Figure \ref{fig: Q3} displays the response of our two models when prompted with the following complex
-level question: "\textit{How do gradient-based optimization techniques like Adam handle exploding or vanishing gradient problems in deep learning models?}"
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
@@ -301,7 +283,9 @@ provided the exact same output as the model trained on more data for less epochs
 in Figure \ref{fig: Q1_Model1}, with a more in depth explanation of what each parameter
 represents in the equation.
 
-\begin{figure}[htbp]
+Figure \ref{fig: Q2} displays the response of our two models when prompted with the following application
+level question: "\textit{Can you explain how decision trees handle numerical variables in a classification task?}"
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
@@ -324,6 +308,8 @@ to the question, where \ref{fig: Q2_Model2} shows that the response from model
 2 was also a good response on the questions and provided even more information
 on how the decision tree handles categorical features when the tree is induced.
 
+Figure \ref{fig: Q3} displays the response of our two models when prompted with the following complex
+level question: "\textit{How do gradient-based optimization techniques like Adam handle exploding or vanishing gradient problems in deep learning models?}"
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
@@ -367,8 +353,8 @@ We are also able to locally run our models given the correct computer architectu
 All in all we have successfully been able to create models that are capable of delivering
 accurate and context aware responses to complex AI, machine learning, and data science questions.
 
-\section{References}
 \begin{thebibliography}{9}
+\small
 
 \bibitem{llama3herd}
 Meta AI Research. \textit{The LLaMA-3: Herd of Models}. Available at: \url{https://ai.meta.com/research/publications/the-llama-3-herd-of-models/}. Accessed: 2024-10-13.
@@ -392,7 +378,7 @@ Google Search. \textit{Search Results: Cross Validated robots.txt}. Available at
 Richardson, Leonard. \textit{Beautiful Soup Documentation}. Available at: \url{https://pypi.org/project/beautifulsoup4/#:~:text=Beautiful%20Soup%20is%20a%20library,and%20modifying%20the%20parse%20tree.}. Accessed: 2024-10-13.
 
 \bibitem{stackexchange-throttle}
-Stack Exchange Inc. \textit{Throttle - Stack Exchange API Documentation}. Available at: \url{https://api.stackexchange.com/docs/throttle}. Accessed: 2024-10-23.
+Stack Exchange Inc. \textit{Throttle - Stack Exchange API Documentation}. Available at: \url{https://api.stackexchange.com/docs/throttle}. Accessed: 2024-10-13.
 
 \bibitem{stackexchange-terms}
 Stack Exchange Inc. \textit{Terms of Service - Stack Exchange}. Available at: \url{https://stats.stackexchange.com/legal/terms-of-service/public}. Accessed: 2024-10-12.
