@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -11,12 +11,6 @@
 \usepackage{titlesec}
 
 \geometry{margin=1in}
-
-% Modify section formatting to prevent page breaks
-\titleformat{\section}{\normalfont\Large\bfseries}{}{0em}{}
-\titleformat{\subsection}[runin]{\normalfont\bfseries}{}{1em}{}
-\titlespacing{\section}{0pt}{*3}{*1}
-\titlespacing{\subsection}{0pt}{*2}{*1}
 
 \title{Your Paper Title}
 
@@ -75,22 +69,106 @@ details about the scraped data, and the tools used in the scraping process.
 
 \subsection{Overview of Cross Validated}
 
+With the ever-expanding fields of statistics and machine learning (ML), it is hard to keep up with all of
+the new ideas and models being introduced.
+Cross Validated \cite{stackexchange}, part of the Stack Exchange network, hosts a specialised question-and-answer platform
+dedicated to topics such as:
+\begin{itemize}
+    \item Statistics
+    \item Machine learning
+    \item Data analysis
+    \item Data mining
+    \item Data visualisation
+\end{itemize}
+Cross Validated provides a community-driven environment for professionals and enthusiasts to ask and answer
+questions, share knowledge and discuss best practices in these fields \cite{stackexchange-tour}.
+
 \subsection{Data Overview}
+
+The objective we wanted to complete was to gather any meaningful insights on common challenges
+faced by data scientists and optimal solutions to these challenges. Cross Validated offered us a wealth of
+information, more than sufficient to achieve our goal.
+
+We scraped 39,668 of the highest-voted questions and their corresponding highest-voted answer from Cross Validated.
+Only the text bodies of each question and answer were scraped to ensure the data contained no personal information.
+We strictly wanted to focus on a model that only generates text. Therefore, we excluded any questions or answers
+which contained code blocks in the body of the text.
 
 \subsection{Tools and Techniques for Data Scraping}
 
+Python and the Beautifulsoup4 library \cite{beautifulsoup} was utilised to scrape the question-and-answer pairs
+from Cross Validated. Stack Exchange enforces several throttling limits based on the Internet Protocol (IP)
+address of the user \cite{stackexchange-throttle}. If a single IP exceeds 30 requests per second, 
+any additional requests will be dropped and the user's IP will be temporarily blocked. To prevent our scraper from
+violating this throttle, we implemented an exponential backoff function, which reduced the likelihood of
+triggering the throttle and ensuring smoother data retrieval.
+
+All question-and-answer pairs were scraped in batches of 1,000 observations and subsequently
+stored in their respective Javascript object notation (JSON) files.
+
+\section{Ethics Regarding Web Scraping}
+
+This section of the report focuses on the ethical considerations we examined prior to scraping our data.
+While scraping information from the web can be extremely useful, especially for building a large language
+model, the ethical concerns should always be addressed. This includes intellectual property, personal
+property and informed consent. There is a fine balance between balancing respect for privacy and the
+utility of web scraping.
+
+\subsection{Intellectual Property}
+
+There are laws that protect websites such as copyright and one should step carefully not to unintentionally
+break a law. It is important therefore to read the sites terms of service to make
+sure you don't use any data you are not allowed to \cite{stackexchange-terms}.
+
+\subsection{Personal Property}
+Personal information is protected by the protection of personal information (POPI) act and it is usually of
+your best interest to not scrape any personal information from a website. If personal information does slip
+through one should pseudonymise and anonymise the data. 
+
+\subsection{Informed Consent}
+
+Even if the data is publicly available it does not mean you have the right to use it. You should ask
+beforehand if you are allowed to use the data and for what purposes.
+There are steps you can follow to help you ethically scrape data:
+\begin{itemize}
+    \item Targeted scraping: Only scrape the data that you need, do not scrape extra information such as personal information.
+    \item Legal compliance: Ensure that you follow the websites terms of service as well as any other laws.
+    \item Respecting data ownership: Online data still belongs to the person who posted it, make sure you use the data in a way that respects their rights.
+\end{itemize}
+
 \section{Wrangling The Scraped Data}
+
+This section of the report focuses on cleaning, normalising and saving the scraped data
+by applying wrangling techniques.
 
 \subsection{Data Cleaning}
 
-\subsection{Text Normalisation}
+The scraped data was cleaned to ensure there are no irrelevant text in the data. Questions that
+were closed or locked by the site admins contained a post notification board, which was removed
+from the data by utilising beautifulsoup4. Any Hypertext Markup Language (HTML) tags that contained relevant text was then kept
+in all of the question-and-answer pairs. These HTML tags were: $<$p$>$, $<$code$>$, $<$a$>$, $<$ol$>$, $<$li$>$, $<$ul$>$,
+$<$strong$>$, $<$b$>$, $<$i$>$, $<$u$>$, $<$mark$>$, $<$small$>$, $<$sub$>$, $<$sup$>$, $<$span$>$, $<$table$>$.
 
-\subsection{Structuring And Saving The Data}
+From these remaining HTML tags, the text were stripped away and we were left with only the
+text of all of the question-and-answer pairs.
+
+\subsection{Text Normalisation, Structuring and Saving the Data}
+
+From the cleaned body text of the questions-and-answer pairs, some characters were
+encoded as Unicode characters. These characters were then encoded to either American Standard Code for Information Interchange (ASCII)
+characters if they had an ASCII index or to HTML entities if they did not.
+
+The data was then structured into a list of dictionaries, categorising questions as the role of the "user"
+and the answers as the role of the "assistant". This format was used to comply with the format required by
+the LLaMa model.
+
+The list of dictionaries, which contains the cleaned, normalised and structured data, was then saved to
+a new JSON file.
 
 \section{LLaMA Model Overview and Fine-tuning Process}
 
-We used the Large Language Model Meta AI (LLaMA) model, specifically the 3-billion parameter version,
-which is part of a family of transformer-based models. Llama is an open source LLM provided by Meta
+We used the large language model meta AI (LLaMA) model, specifically the 3-billion parameter version,
+which is part of a family of transformer-based models \cite{llama3herd}. Llama is an open source LLM provided by Meta
 and we specifically used the LLaMA-3B-Instruct model for question-and-answering. LLaMA is designed for natural
 language processing tasks, and its architecture follows a standard decoder-only transformer,
 making it suitable for autoregressive text generation. This model is ideal for tasks like question answering,
@@ -124,7 +202,7 @@ research papers, and web data. This gives the model a strong foundation in under
 language structures and domain specific terminology.
 
 We fine-tuned the model using a custom dataset of 39,668 question-and-answer pairs, which were scraped
-from `Cross Validated' which focused on data science, artificial intelligence (AI), and machine learning (ML) topics.
+from `Cross Validated' which focused on data science, artificial intelligence (AI), and ML topics.
 These questions ranged from simple definitions to more complex conceptual explanations. Fine-tuning allowed the
 model to better capture the complexity of these technical subjects, which makes it more accurate in responding and
 understanding to domain specific applications.
@@ -147,17 +225,51 @@ The fine-tuning process involved adjusting several hyperparameters, including:
 \end{itemize}
 We also used 4-bit quantization during training to optimise memory usage, enabling us to fine-tune the model on hardware with limited GPU resources.
 
+\section{Quantization}
+
+Quantization is the process of simplifying machine learning models by reducing the precision of the numbers they use for weights and
+activations. Normally they use 32-bit floating-point numbers, which can be very demanding on memory and processing power.
+By switching to lower precision, such as 8-bit or 4-bit numbers, the model is made faster and more memory-efficient
+without affecting accuracy too much. In this project, we employed \textit{4-bit quantization} during the fine-tuning stage.
+This method allowed it to run on hardware with limited GPU resources when fine-tuning our model.
+
 \section{UnSloth Optimisation}
 
-\subsection{What is UnSloth Optimisation}
+Fine-tuning is devined as the process of updating the actual "brains" of the language model
+through back-propagation. But, finetuning can get very slow and very resource intensive.
+UnSloth Optimisation helps to optimise the process of finetuning our model.
 
-\subsection{How UnSloth Optimisation Works}
+UnSloth is a fine-tuning framework designed to enhance productivity by streamlining the
+process of adapting large language models like Llama-3.2. UnSloth makes fine-tuning
+large language models \cite{unslothdocs}:
+\begin{itemize}
+    \item 2 times faster
+    \item Use 70\% less memory
+    \item Automates hyperparameter tuning
+    \item Maintains model accuracy
+\end{itemize}
 
-\subsection{Benefits of UnSloth in Our Llama-3.2 Model}
+We used UnSloth optimisation to optimise the fine-tuning process of our LLaMa model \cite{unslothfine-tune}.
+UnSloth applies the following techniques to ensure the fine-tuning
+of our model is optimised as much as possible:
+\begin{itemize}
+    \item Layer-freezing: reduces computation, by only fine-tuning specific layers.
+    \item Gradient checkpointing: recomputes activations, which lowers memory usage.
+    \item Dynamic hyperparameter tuning: Automatically adjusts the hyperparameters during the fine-tuning process.
+    \item Efficient data loading: Speeds up fine-tuning with optimised data handling.
+\end{itemize}
+
+\section{Implementation}
+
+This section introduces the final models after fine-tuning the LLaMa-3.2 model on our scraped data.
+We wanted to explore if more data is always better for training or fine-tuning a model.
+
+We constructed 2 models, the first model fine-tuned the original model on the full dataset of
+39,668 question-and-answer pairs for one epoch and the second model fine-tuned the original model
+on the 10,000 highest-voted question-and-answer pairs for three epochs. Both of the models took
+approximately 12 hours to complete the fine-tuning process.
 
 \section{Results}
-
-\section{Ethics}
 
 \section{Conclusion}
 
@@ -176,8 +288,20 @@ Unsloth AI Tutorials. \textit{How to Fine-Tune Llama 3 and Export to Ollama}. Av
 \bibitem{stackexchange}
 Stack Exchange Inc. \textit{Cross Validated - Statistical Analysis, Machine Learning, Data Mining, and Data Visualization}. Available at: \url{https://stats.stackexchange.com/}. Accessed: 2024-10-12.
 
+\bibitem{stackexchange-tour}
+Stack Exchange Inc. \textit{Cross Validated Tour: About}. Available at: \url{https://stats.stackexchange.com/tour#:~:text=Cross%20Validated%20is%20a%20question,Exchange%20network%20of%20Q\%26A\%20sites.}. Accessed: 2024-10-13.
+
 \bibitem{googlesearch}
 Google Search. \textit{Search Results: Cross Validated robots.txt}. Available at: \url{https://www.google.com/search?q=cross+validated+robots.txt&rlz=1C1GCEU_en-gbZA1068ZA1068&oq=cross+val}. Accessed: 2024-10-12.
+
+\bibitem{beautifulsoup}
+Richardson, Leonard. \textit{Beautiful Soup Documentation}. Available at: \url{https://pypi.org/project/beautifulsoup4/#:~:text=Beautiful%20Soup%20is%20a%20library,and%20modifying%20the%20parse%20tree.}. Accessed: 2024-10-13.
+
+\bibitem{stackexchange-throttle}
+Stack Exchange Inc. \textit{Throttle - Stack Exchange API Documentation}. Available at: \url{https://api.stackexchange.com/docs/throttle}. Accessed: 2024-10-23.
+
+\bibitem{stackexchange-terms}
+Stack Exchange Inc. \textit{Terms of Service - Stack Exchange}. Available at: \url{https://stats.stackexchange.com/legal/terms-of-service/public}. Accessed: 2024-10-12.
 
 \end{thebibliography}
 
