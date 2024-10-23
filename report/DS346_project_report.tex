@@ -9,58 +9,46 @@
 \usepackage{multicol}
 \usepackage{hyperref}
 \usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{float}
 
 \geometry{margin=1in}
 
-\title{Your Paper Title}
+\title{Taming the LLaMA: Fine-Tuning a 3B Parameter Model for Artificial Intelegence and Machine Learning}
 
 \author{
-    \fbox{%
         \begin{minipage}{0.3\textwidth}
             \centering
             Arlo Steyn\\
-            Department of Computer Science\\
-            University of Stellenbosch\\
-            24713848\\
-            \texttt{24713848@sun.ac.za}
+            24713848
         \end{minipage}%  
-    }%
     \hfill
-    \fbox{%
         \begin{minipage}{0.3\textwidth}
             \centering
             Andre van der Merwe\\
-            Department of Computer Science\\
-            University of Stellenbosch\\
-            24923273\\
-            \texttt{24923273@sun.ac.za}
+            24923273
         \end{minipage}%
-    }%
     \hfill
-    \fbox{%
         \begin{minipage}{0.3\textwidth}
             \centering
             Stephan Delport\\
-            Department of Computer Science\\
-            University of Stellenbosch\\
-            242710083\\
-            \texttt{242710083@sun.ac.za}
+            24710083
         \end{minipage}%
-    }
 }
-
-\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
-This is the abstract of the paper. Summarise the main points and contributions here.
-\end{abstract}
-
 \section{Introduction}
-This is where you introduce the topic of your paper.
+Large language models (LLMs) have revolutionized natural language processing tasks,
+which offers advanced capabilities in generating human like responses. This project
+aimed to fine-tune LLaMA, a 3 billion parameter model on a scraped dataset that contains
+questions and answers related to data science, artificial intelligence, and machine learning.
+By using Kaggle's free GPU resources, we successfully fine-tuned two models: one trained on
+the full dataset and another on a subset of the data, allowing us to compare their performance
+in generating accurate and contextually relevant answers. This report outlines the steps taken
+in data collection, model fine-tuning, and performance evaluation.
 
 \section{Web Scraping Cross Validated}
 
@@ -103,7 +91,7 @@ any additional requests will be dropped and the user's IP will be temporarily bl
 violating this throttle, we implemented an exponential backoff function, which reduced the likelihood of
 triggering the throttle and ensuring smoother data retrieval.
 
-All question-and-answer pairs were scraped in batches of 1,000 observations and subsequently
+All question-and-answer pairs were scraped in batches of 5,000 observations and subsequently
 stored in their respective Javascript object notation (JSON) files.
 
 \section{Ethics Regarding Web Scraping}
@@ -225,13 +213,21 @@ The fine-tuning process involved adjusting several hyperparameters, including:
 \end{itemize}
 We also used 4-bit quantization during training to optimise memory usage, enabling us to fine-tune the model on hardware with limited GPU resources.
 
-\section{Quantization}
+\section{Quantization and Tokenization}
 
-Quantization is the process of simplifying machine learning models by reducing the precision of the numbers they use for weights and
-activations. Normally they use 32-bit floating-point numbers, which can be very demanding on memory and processing power.
-By switching to lower precision, such as 8-bit or 4-bit numbers, the model is made faster and more memory-efficient
-without affecting accuracy too much. In this project, we employed \textit{4-bit quantization} during the fine-tuning stage.
-This method allowed it to run on hardware with limited GPU resources when fine-tuning our model.
+Tokenization creates tokens for words or subwords in a text.
+We used Byte-Pair Encoding (BPE), which splits long complex words into smaller
+words which is then easier for the model to understand. The tokens are then mapped to numerical
+representations. Each token then has the meaning in the context of which it is used. The model
+can then make predictions from these tokens.
+
+Quantization is the process of simplifying machine learning models by reducing the
+precision of the numbers they use for weights and activations. Normally they use 32-bit
+floating-point numbers, which is demanding on memory and processing power. By switching to
+lower precision, such as 8-bit or 4-bit numbers, the model is made faster and more
+memory-efficient without affecting accuracy too much. In this project, we employed
+\textit{4-bit quantization} during the fine-tuning stage. This method allowed it to
+run on hardware with limited GPU resources when fine-tuning our model.
 
 \section{UnSloth Optimisation}
 
@@ -240,8 +236,8 @@ through back-propagation. But, finetuning can get very slow and very resource in
 UnSloth Optimisation helps to optimise the process of finetuning our model.
 
 UnSloth is a fine-tuning framework designed to enhance productivity by streamlining the
-process of adapting large language models like Llama-3.2. UnSloth makes fine-tuning
-large language models \cite{unslothdocs}:
+process of adapting LLM like Llama-3.2. UnSloth makes fine-tuning
+LLM \cite{unslothdocs}:
 \begin{itemize}
     \item 2 times faster
     \item Use 70\% less memory
@@ -271,7 +267,105 @@ approximately 12 hours to complete the fine-tuning process.
 
 \section{Results}
 
+This section of the reports presents the results of our 2 models. Each model is given the
+same prompts to generate a response on and the output is then compared to one another.
+We prompted both models with a data science introductory, application and complex level question.
+
+Figure \ref{fig: Q1} displays the response of our two models when prompted with the following introductory
+level question: "\textit{What is the gaussian formula and all of its parameters?}"
+Figure \ref{fig: Q2} displays the response of our two models when prompted with the following application
+level question: "\textit{Can you explain how decision trees handle numerical variables in a classification task?}"
+Figure \ref{fig: Q3} displays the response of our two models when prompted with the following complex
+level question: "\textit{How do gradient-based optimization techniques like Adam handle exploding or vanishing gradient problems in deep learning models?}"
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/1EpochQ1.png}
+        \caption{Model trained on all of the data for one epoch}
+        \label{fig: Q1_Model1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/10kQ1.png}
+        \caption{Model trained on 10,000 observations for 3 epochs}
+        \label{fig: Q1_Model2}
+    \end{subfigure}
+    \caption{Introductory level question : "\textit{What is the gaussian formula and all of its parameters?}"}
+    \label{fig: Q1}
+\end{figure}
+From Figure \ref{fig: Q1_Model2}, we can see that the model trained on less data for more epochs
+provided the exact same output as the model trained on more data for less epochs, seen
+in Figure \ref{fig: Q1_Model1}, with a more in depth explanation of what each parameter
+represents in the equation.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/1EpochQ2.png}
+        \caption{Model trained on all of the data for one epoch}
+        \label{fig: Q2_Model1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/10kQ2.png}
+        \caption{Model trained on 10,000 observations for 3 epochs}
+        \label{fig: Q2_Model2}
+    \end{subfigure}
+    \caption{Application level question : "\textit{Can you explain how decision trees handle numerical variables in a classification task?}"}
+    \label{fig: Q2}
+\end{figure}
+From Figure \ref{fig: Q2_Model1} shows that model 1 provided a very good response
+to the question, where \ref{fig: Q2_Model2} shows that the response from model
+2 was also a good response on the questions and provided even more information
+on how the decision tree handles categorical features when the tree is induced.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/1EpochQ3.png}
+        \caption{Model trained on all of the data for one epoch}
+        \label{fig: Q3_Model1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/10kQ3.png}
+        \caption{Model trained on 10,000 observations for 3 epochs}
+        \label{fig: Q3_Model2}
+    \end{subfigure}
+    \caption{Complex level question : "\textit{How do gradient-based optimization techniques like Adam handle exploding or vanishing gradient problems in deep learning models?}"}
+    \label{fig: Q3}
+\end{figure}
+From Figure \ref{fig: Q3_Model1} and Figure \ref{fig: Q3_Model2} model 1 and model 2 respectively
+gives a good response of the given question. Model 1 focuses more on the Adam optimiser and how
+it handles exploding or vanishing gradients, where
+model 2 focuses more on different techniques used by gradient-based optimisation techniques
+to handle exploding and vanishing gradients.   
+
 \section{Conclusion}
+
+We have successfully scraped and wrangled data (from CrossValidated)
+and used that data to fine-tune a 3 billion parameter LLaMa model.
+After training 2 distinct models - one with a full epoch which uses all the
+training data (39,686) and another with 3 epochs on 10,000 datapoints - on
+Kaggle using their free 12 hour GPU sessions, we were able to get and run
+inference on these large models and utilize their power.
+
+Model 1 is able to give us broader answers to our related topics but lacks a
+deeper understanding of the concepts whereas Model 2 is able to dive deeper
+into the topics but is not able to discuss as many topics. 
+Overall we prefer model 2 because it produces results that are
+of higher understanding and complexity.
+
+We are also able to locally run our models given the correct computer architecture. 
+All in all we have successfully been able to create models that are capable of delivering
+accurate and context aware responses to complex AI, machine learning, and data science questions.
 
 \section{References}
 \begin{thebibliography}{9}
