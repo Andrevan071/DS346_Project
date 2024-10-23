@@ -62,7 +62,7 @@
 \maketitle
 
 \begin{abstract}
-This is the abstract of the paper. Summarize the main points and contributions here.
+This is the abstract of the paper. Summarise the main points and contributions here.
 \end{abstract}
 
 \section{Introduction}
@@ -87,9 +87,65 @@ details about the scraped data, and the tools used in the scraping process.
 
 \subsection{Structuring And Saving The Data}
 
-\section{Llama Model}
+\section{LLaMA Model Overview and Fine-tuning Process}
 
-\section{Train Model}
+We used the Large Language Model Meta AI (LLaMA) model, specifically the 3-billion parameter version,
+which is part of a family of transformer-based models. Llama is an open source LLM provided by Meta
+and we specifically used the LLaMA-3B-Instruct model for question-and-answering. LLaMA is designed for natural
+language processing tasks, and its architecture follows a standard decoder-only transformer,
+making it suitable for autoregressive text generation. This model is ideal for tasks like question answering,
+summarisation, and dialogue generation, but also has many other abilities and applications.
+
+\subsection{Model Architecture}
+The LLaMA model is built on the transformer architecture, which uses self attention mechanisms to process input
+sequences and generate output. It is also autoregressive which means that it generates text one token at a time,
+using previously generated tokens to predict the next one.
+
+Key components of the LLaMA model architecture include:
+\begin{itemize}
+    \item Multi-Head Self-Attention: This allows the model to focus on different parts of the input sequence at the same time, which allows it to capture relationships between words across long sequences.
+    \item Attention Heads: 32 heads per layer
+    \item Attention Head Dimension: 128 dimensions per head
+    \item Feed-Forward Networks (FFN): These are fully connected layers that transform the output of the self-attention mechanism.
+    \item Feed-Forward Network Dimension: 11008 units (intermediate layer)
+    \item Model Size: 3 billion parameters
+    \item Number of Layers: 32 transformer layers
+    \item Hidden Size: 4096 hidden units per layer
+    \item Positional Encoding: Rotary positional encodings (RoPE)
+    \item Layer Normalisation: Applied before self-attention and feed-forward layers
+\end{itemize}
+
+\subsection{Pre-Trained Weights and Dataset}
+
+The pre-trained weights for the LLaMA model were obtained from the Unsloth repository, which
+provided a specialised model version fine-tuned for question-and-answer and conversational tasks.
+The initial pre-training of LLaMA was done on a large corpus of diverse text, including books,
+research papers, and web data. This gives the model a strong foundation in understanding complex
+language structures and domain specific terminology.
+
+We fine-tuned the model using a custom dataset of 39,668 question-and-answer pairs, which were scraped
+from `Cross Validated' which focused on data science, artificial intelligence (AI), and machine learning (ML) topics.
+These questions ranged from simple definitions to more complex conceptual explanations. Fine-tuning allowed the
+model to better capture the complexity of these technical subjects, which makes it more accurate in responding and
+understanding to domain specific applications.
+
+\subsection{Fine-Tuning Process}
+
+The version of LLaMA we used was fine-tuned for question-and-answering tasks, making it ideal for providing answers
+to questions related to data science, AI, and ML.
+Fine-tuning was performed using the Low-Rank Adaptation (LoRA) technique, which allows for efficient fine-tuning
+of large models by freezing most of the pre-trained model parameters and only updating a small subset of parameters.
+This drastically reduces the computational resources required, and also still achives high accuracy. We used
+a combination of gradient accumulation and batch processing to handle the relatively large dataset size during
+the fine-tuning phase.
+
+The fine-tuning process involved adjusting several hyperparameters, including:
+\begin{itemize}
+    \item Learning rate: Set to 2e-4 for optimal convergence without overfitting.
+    \item Batch size: A batch size of 4 per GPU was used to maximise the use of available memory.
+    \item Gradient accumulation: This was set to 4, allowing larger effective batch sizes without exceeding memory limits.
+\end{itemize}
+We also used 4-bit quantization during training to optimise memory usage, enabling us to fine-tune the model on hardware with limited GPU resources.
 
 \section{UnSloth Optimisation}
 
@@ -108,12 +164,22 @@ details about the scraped data, and the tools used in the scraping process.
 \section{References}
 \begin{thebibliography}{9}
 
-\bibitem{website1}
-Author Name, ``Title of the Webpage,'' \textit{Website Name}, Date Accessed. [Online]. Available: \url{http://example.com}
+\bibitem{llama3herd}
+Meta AI Research. \textit{The LLaMA-3: Herd of Models}. Available at: \url{https://ai.meta.com/research/publications/the-llama-3-herd-of-models/}. Accessed: 2024-10-13.
 
-\bibitem{website2}
-Another Author, ``Another Title of the Webpage,'' \textit{Another Website Name}, Date Accessed. [Online]. Available: \url{http://another-example.com}
+\bibitem{unslothdocs}
+Unsloth Documentation Team. \textit{Unsloth AI Documentation}. Available at: \url{https://docs.unsloth.ai/}. Accessed: 2024-10-13.
+
+\bibitem{unslothfine-tune}
+Unsloth AI Tutorials. \textit{How to Fine-Tune Llama 3 and Export to Ollama}. Available at: \url{https://docs.unsloth.ai/tutorials/how-to-finetune-llama-3-and-export-to-ollama}. Accessed: 2024-10-13.
+
+\bibitem{stackexchange}
+Stack Exchange Inc. \textit{Cross Validated - Statistical Analysis, Machine Learning, Data Mining, and Data Visualization}. Available at: \url{https://stats.stackexchange.com/}. Accessed: 2024-10-12.
+
+\bibitem{googlesearch}
+Google Search. \textit{Search Results: Cross Validated robots.txt}. Available at: \url{https://www.google.com/search?q=cross+validated+robots.txt&rlz=1C1GCEU_en-gbZA1068ZA1068&oq=cross+val}. Accessed: 2024-10-12.
 
 \end{thebibliography}
+
 
 \end{document}
